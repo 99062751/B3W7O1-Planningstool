@@ -2,18 +2,6 @@
 require_once 'connection_database.php';
 $gameinfo= GetGamesDataFromBase();
 
-$time= $explain_time = $players = $game = "";
-if($_SERVER["REQUESTMETHOD"] == "POST"){
-    $game= $_POST["game"];
-    $time= $_POST["start_time"];
-    $explain_time= $_POST["explain_time"];
-    $players= $_POST["players"];
-
-    echo "<b>Game: </b>". $game;
-    echo "<b>Starttijd: </b>". $start_time;
-    echo "<b>Host: </b>". $explain;
-    echo "<b>Spelers: </b>". $players;
-}   
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -29,7 +17,19 @@ if($_SERVER["REQUESTMETHOD"] == "POST"){
         <h3>Uw spellen:</h3>
     <?php  foreach($gameinfo as $arr => $game){?>
     <div class="gameblock">
-        
+        <?php $time= $explain_time = $players = $game = "";
+            if($_SERVER["REQUESTMETHOD"] == "GET"){
+                $game= $_GET["game"];
+                $time= $_GET["start_time"];
+                $explain_time= $_GET["explain_time"];
+                $players= $_GET["players"];
+
+                echo "<b>Game: </b>". $game;
+                echo "<b>Starttijd: </b>". $start_time;
+                echo "<b>Host: </b>". $explain;
+                echo "<b>Spelers: </b>". $players;
+            
+        }   ?>
     </div>
    <?php }?>
         <a href="viewingpage.php" style= "text-decoration: none">Spel plannen</a>

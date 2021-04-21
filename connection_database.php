@@ -36,35 +36,29 @@ function GetGamesDataFromBase(){
         return $gameinfo;
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["time-input"]) && isset($_GET["personexplain_input"]) && isset($_GET["personsplay_input"])) {
+if ($_SERVER["REQUEST_METHOD"] == "GET") {
     console_log("WAAR!");
     if(isset($_GET["submit"])){
-        console_log("Geplande spel gepost");
-        $time = trimdata($_GET["time-input"]);
-        $GM= trimdata($_GET["personexplain_input"]);
-        $players= trimdata($_GET["personsplay_input"]);
-        console_log("Gecontroleeerd");
-        return $time;
-        return $GM;
-        return $players;
-        AddCreatedGameToIndex();
+        console_log("WAAROM!");
+        $CheckInput= Control();
+        AddCreatedGameToIndex($time,$GM,$players);
     }
-}else{
+    
+} else {
     console_log("ERROR: INPUT IS DECLINED OR EMPTY");
 }
-
-//Check geplande spel is compleet 
-function CheckCreateLocation(){
-    //controle 
-    if(isset($_POST["create_location"]) && $_POST["create_location"] != ""){
-        $selected2= trimdata($_POST["create_location"]);
-        console_log("SUCCESFULLY CHECKED: " . $selected2);
-        return $selected2;
-    }else{
-        console_log('ERROR: LOCATION IS EMPTY OR IS DECLINED');
-    }
+function Control(){
+    console_log("WAARHEEN!");
+    $time = trimdata($_GET["time"]);
+    $GM= trimdata($_GET["GameMaster"]);
+    $players= trimdata($_GET["players"]);
+    return $time;
+    return $GM;
+    return $players;
 }
 
+//te doen: database maken, spel controleren, spelers controleren, tijd controleren, duration berekenen
+// voor database id primaire sleutel en unieke waarde.
 function trimdata($var){
     $var= trim($var);
     $var= stripslashes($var);
@@ -83,5 +77,9 @@ function Connect_IDS_tobase(){
 
     $conn = null;
     return  $gameinfo2;
+}
+
+function AddCreatedGameToIndex($time,$GM,$players){
+    console_log("UITJE");
 }
 ?>

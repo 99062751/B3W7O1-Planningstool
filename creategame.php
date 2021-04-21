@@ -29,13 +29,13 @@ console_log($id);
         </select>
             <br>
         <label for="time">Starttijd</label>
-        <input type="time"  placeholder="00:00" >
+        <input type="time" name="time">
         <br>
-        <label for="">Persoon die uitlegt</label>
-        <input name="personexplain_input" type="text">
+        <label for="GameMaster">Persoon die uitlegt</label>
+        <input name="GameMaster" type="text">
         <br>
-        <label for="">Personen die spelen</label>
-        <input name="personsplay_input" type="text">
+        <label for="players">Personen die spelen</label><br>
+        <textarea name="players" cols="30" rows="10"></textarea>
         <br>
         <button type="submit" name="submit">Maak</button>
         <a href="index.php" style="text-decoration: none">Terug naar homepagina</a>
