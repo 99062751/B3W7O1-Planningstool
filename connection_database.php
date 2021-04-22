@@ -36,34 +36,39 @@ function GetGamesDataFromBase(){
         return $gameinfo;
 }
 
+/*============ Geplande data van spel ophalen en in database zetten ===============*/
+
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
-    console_log("WAAR!");
     if(isset($_GET["submit"])){
-        console_log("WAAROM!");
         $CheckInput= Control();
-        AddCreatedGameToIndex($time,$GM,$players);
     }
     
 } else {
     console_log("ERROR: INPUT IS DECLINED OR EMPTY");
 }
+
 function Control(){
-    console_log("WAARHEEN!");
-    $time = trimdata($_GET["time"]);
-    $GM= trimdata($_GET["GameMaster"]);
-    $players= trimdata($_GET["players"]);
-    return $time;
-    return $GM;
-    return $players;
+    $time = CheckTime($_GET["time"]);
 }
 
-//te doen: database maken, spel controleren, spelers controleren, tijd controleren, duration berekenen
-// voor database id primaire sleutel en unieke waarde.
-function trimdata($var){
-    $var= trim($var);
-    $var= stripslashes($var);
-    $var= htmlspecialchars($var);
-    return $var;
+function CheckTime($time){
+    if(is_numeric($time) && $time < 2400 && $time != ""){
+        $explaintime= $_GET["explaintime"];
+        CalculateDuration($time, $explaintime);
+    } elseif($time > 2400){
+        console_log("ERROR: TIME CAN ONLY BE LESS THAN 24 HOURS");
+    }elseif($time == ""){
+        console_log("ERROR: TIME IS EMPTY");
+    }
+    else{
+        console_log("ERROR: THIS IS NOT A TIME");
+    }
+}   
+
+function CalculateDuration($time, $explaintime){
+// hier blijft hij nu
+    $duration= $time + $explaintime;
+    GetAllInfo($duration, $time);
 }
 
 //Resultaat ophalen uit database met zelfde id als $id
@@ -78,8 +83,49 @@ function Connect_IDS_tobase(){
     $conn = null;
     return  $gameinfo2;
 }
+//te doen: spel controleren, spelers controleren
+function trimdata(){
+    $var= trim($var);
+    $var= stripslashes($var);
+    $var= htmlspecialchars($var);
+    return $var;
+}
+
+
+function GetAllInfo($duration, $time){
+    $GameiD= $_GET["id"];
+    $GM= trimdata($_GET["GameMaster"]);
+    $players= trimdata($_GET["players"]);
+    return $GM;
+    return $players;
+    console_log("TIME ooooo");
+    
+
+    console_log("1: ". $duration);
+    console_log("2: ". $time);
+    console_log("3: ". $GM);
+    console_log("4: ". $players);
+    console_log("5: ". $GameiD);
+     // AddCreatedGameToIndex($time,$GM,$players);
+}
 
 function AddCreatedGameToIndex($time,$GM,$players){
-    console_log("UITJE");
-}
+    $conn= connect();
+    if(isset($time) && isset($GM) && isset($players)){
+        console_log("SUCCESFULLY ADDED: DATA");
+        $stmt = $conn->prepare("INSERT INTO planning(game, start_time, duration, host, player) VALUES(:game, :start_time, :duration, :host, :players)");
+        $stmt->bindParam(':name', $GameiD);
+        $stmt->bindParam(':start_time', $time);
+        $stmt->bindParam(':duration', $duration);
+        $stmt->bindParam(':duration', $GM);
+        $stmt->bindParam(':players', $players);
+        $stmt->execute();   
+    } else{
+        console_log("ERROR: NAME FOR LOCATION IS EMPTY");
+    }
+    $conn = null;
+}    
+
+
+
 ?>

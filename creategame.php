@@ -2,7 +2,7 @@
 require_once 'connection_database.php';
 $gameinfo= GetGamesDataFromBase();
 $id= $_GET["id"];
-console_log($id);
+$gameinfo2= Connect_IDS_tobase();
 ?>
 
 
@@ -30,6 +30,7 @@ console_log($id);
             <br>
         <label for="time">Starttijd</label>
         <input type="time" name="time">
+        <input type="hidden" name="explaintime" value="<?= $gameinfo2["explain_minutes"]?>">
         <br>
         <label for="GameMaster">Persoon die uitlegt</label>
         <input name="GameMaster" type="text">
@@ -38,7 +39,8 @@ console_log($id);
         <textarea name="players" cols="30" rows="10"></textarea>
         <br>
         <button type="submit" name="submit">Maak</button>
-        <a href="index.php" style="text-decoration: none">Terug naar homepagina</a>
+        <br>
+        <a href="viewingpage.php" style="text-decoration: none">Terug naar overzicht</a>
     </form>
 
 </div>

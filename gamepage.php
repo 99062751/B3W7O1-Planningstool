@@ -16,7 +16,7 @@ $gameinfo2= Connect_IDS_tobase();
 </head>
 <body>
 <header><h1><?php echo $gameinfo2["name"];?></h1>
-    <a class="backbutton" href="index.php"><i class="fas fa-long-arrow-alt-left"></i> Terug</a></header>
+    <a class="backbutton" href="viewingpage.php"><i class="fas fa-long-arrow-alt-left"></i> Terug</a></header>
 <div id="container">
     <div class="detail">
         <div class="left">

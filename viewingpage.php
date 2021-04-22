@@ -15,6 +15,7 @@ $gameinfo= GetGamesDataFromBase();
 </head>
 <body>
     <div class="container">
+    <a href="index.php" style="text-decoration: none">Terug</a>
         <h1>Kies een game!</h1>
         <?php foreach($gameinfo as $array => $game){?>
             <a class="item" href="gamepage.php?id=<?= $game["id"];?>">
@@ -36,7 +37,6 @@ $gameinfo= GetGamesDataFromBase();
         </a>
         <?php } ?>
     </div>
-   
 
 </body>
 </html>
