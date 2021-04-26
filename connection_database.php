@@ -55,7 +55,7 @@ function CheckTime($time){
     if(is_numeric($time) && $time < 2400 && $time != ""){
         $explaintime= $_GET["explaintime"];
         CalculateDuration($time, $explaintime);
-    } elseif($time > 2400){
+    } elseif($time > 2400 && $time != ""){
         console_log("ERROR: TIME CAN ONLY BE LESS THAN 24 HOURS");
     }elseif($time == ""){
         console_log("ERROR: TIME IS EMPTY");
@@ -83,6 +83,7 @@ function Connect_IDS_tobase(){
     $conn = null;
     return  $gameinfo2;
 }
+
 //te doen: spel controleren, spelers controleren
 function trimdata(){
     $var= trim($var);
@@ -91,33 +92,22 @@ function trimdata(){
     return $var;
 }
 
-
 function GetAllInfo($duration, $time){
-    $GameiD= $_GET["id"];
-    $GM= trimdata($_GET["GameMaster"]);
-    $players= trimdata($_GET["players"]);
-    return $GM;
-    return $players;
-    console_log("TIME ooooo");
-    
-
-    console_log("1: ". $duration);
-    console_log("2: ". $time);
-    console_log("3: ". $GM);
-    console_log("4: ". $players);
-    console_log("5: ". $GameiD);
-     // AddCreatedGameToIndex($time,$GM,$players);
+    $GameiD= $_GET["GameiD"];
+    $GM= $_GET["GameMaster"];
+    $players= $_GET["players"];
+    AddCreatedGameToBase($duration, $time, $GM, $players, $GameiD);
 }
 
-function AddCreatedGameToIndex($time,$GM,$players){
+function AddCreatedGameToBase($duration, $time, $GM, $players, $GameiD){
     $conn= connect();
     if(isset($time) && isset($GM) && isset($players)){
         console_log("SUCCESFULLY ADDED: DATA");
-        $stmt = $conn->prepare("INSERT INTO planning(game, start_time, duration, host, player) VALUES(:game, :start_time, :duration, :host, :players)");
-        $stmt->bindParam(':name', $GameiD);
+        $stmt = $conn->prepare("INSERT INTO `planning`(game, start_time, duration, host, player) VALUES(:game, :start_time, :duration, :host, :players)");
+        $stmt->bindParam(':game', $GameiD);
         $stmt->bindParam(':start_time', $time);
         $stmt->bindParam(':duration', $duration);
-        $stmt->bindParam(':duration', $GM);
+        $stmt->bindParam(':host', $GM);
         $stmt->bindParam(':players', $players);
         $stmt->execute();   
     } else{

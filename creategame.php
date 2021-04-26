@@ -31,6 +31,7 @@ $gameinfo2= Connect_IDS_tobase();
         <label for="time">Starttijd</label>
         <input type="time" name="time">
         <input type="hidden" name="explaintime" value="<?= $gameinfo2["explain_minutes"]?>">
+        <input type="hidden" name="GameiD" value="<?= $gameinfo2["id"]?>">
         <br>
         <label for="GameMaster">Persoon die uitlegt</label>
         <input name="GameMaster" type="text">
