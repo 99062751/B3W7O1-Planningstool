@@ -3,6 +3,7 @@ require_once 'connection_database.php';
 $gameinfo= GetGamesDataFromBase();
 $id= $_GET["id"];
 $gameinfo2= Connect_IDS_tobase();
+$planninginfo= GetAllDataFromBase();
 ?>
 
 
@@ -20,17 +21,19 @@ $gameinfo2= Connect_IDS_tobase();
     <h3> Hier maakt u uw spellen aan</h3>
     <p>Dit zijn uw keuzes:</p>
 
-    <form action="<?=htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="GET">
+    <form action="<?=htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="POST">
         Spel
         <select name="gamename">
-          <?php  foreach($gameinfo as $arr => $game){?>
-                <option value="<?php echo $game["id"];?>" <?php if($game["id"] == $id){ echo "selected='selected'";} ?> ><?php echo $game["name"];?></option>
+          <?php 
+          $IDpage= $planninginfo["game"];
+           foreach($gameinfo as $arr => $game){ ?>
+                <option value="<?= $game["id"];?>" <?php if($game["id"] == $id){ echo "selected='selected'";} ?> ><?php echo $game["name"];?></option>
             <?php   }?>
         </select>
             <br>
         <label for="time">Starttijd</label>
         <input type="time" name="time">
-        <input type="hidden" name="explaintime" value="<?= $gameinfo2["explain_minutes"]?>">
+
         <input type="hidden" name="GameiD" value="<?= $gameinfo2["id"]?>">
         <br>
         <label for="GameMaster">Persoon die uitlegt</label>
@@ -41,9 +44,8 @@ $gameinfo2= Connect_IDS_tobase();
         <br>
         <button type="submit" name="submit">Maak</button>
         <br>
-        <a href="viewingpage.php" style="text-decoration: none">Terug naar overzicht</a>
+        <a href="gamepage.php?id=<?= $id?>" style="text-decoration: none">Terug naar gamepagina</a>
     </form>
-
 </div>
 </body>
 </html>

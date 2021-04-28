@@ -38,37 +38,16 @@ function GetGamesDataFromBase(){
 
 /*============ Geplande data van spel ophalen en in database zetten ===============*/
 
-if ($_SERVER["REQUEST_METHOD"] == "GET") {
-    if(isset($_GET["submit"])){
-        $CheckInput= Control();
-    }
-    
-} else {
-    console_log("ERROR: INPUT IS DECLINED OR EMPTY");
-}
 
-function Control(){
-    $time = CheckTime($_GET["time"]);
-}
 
-function CheckTime($time){
-    if(is_numeric($time) && $time < 2400 && $time != ""){
-        $explaintime= $_GET["explaintime"];
-        CalculateDuration($time, $explaintime);
-    } elseif($time > 2400 && $time != ""){
-        console_log("ERROR: TIME CAN ONLY BE LESS THAN 24 HOURS");
-    }elseif($time == ""){
-        console_log("ERROR: TIME IS EMPTY");
-    }
-    else{
-        console_log("ERROR: THIS IS NOT A TIME");
-    }
-}   
-
-function CalculateDuration($time, $explaintime){
+function CalculateDuration($time, $explaintime, $playtime){
 // hier blijft hij nu
-    $duration= $time + $explaintime;
-    GetAllInfo($duration, $time);
+console_log($playtime);
+    $time= $time * 1000; 
+    $duration= $playtime+ $explaintime;
+    
+
+    GetAllInfoFromCreatePage($duration, $time, $playtime);
 }
 
 //Resultaat ophalen uit database met zelfde id als $id
@@ -85,17 +64,15 @@ function Connect_IDS_tobase(){
 }
 
 //te doen: spel controleren, spelers controleren
-function trimdata(){
+function trimdata($var){
     $var= trim($var);
     $var= stripslashes($var);
     $var= htmlspecialchars($var);
     return $var;
 }
 
-function GetAllInfo($duration, $time){
-    $GameiD= $_GET["GameiD"];
-    $GM= $_GET["GameMaster"];
-    $players= $_GET["players"];
+function GetAllInfoFromCreatePage($duration, $time){
+    
     AddCreatedGameToBase($duration, $time, $GM, $players, $GameiD);
 }
 
@@ -116,6 +93,76 @@ function AddCreatedGameToBase($duration, $time, $GM, $players, $GameiD){
     $conn = null;
 }    
 
+function GetAllDataFromBase(){
+    $conn= connect();
+
+    $stmt = $conn->prepare("SELECT * FROM planning");
+    $stmt->execute();
+    $planninginfo = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $conn = null;
+    return $planninginfo;
+}
+
+function Controle(){
+    $data=[];
+
+    if(isset($_POST["GameiD"]) && !empty($_POST["GameiD"])){
+        $GameiD= trimdata($_POST["GameiD"]);
+        settype($GameiD, "int");
+
+        $stmt = $conn->prepare($conn, "SELECT `game` FROM `planning` WHERE `game` = '$host'");
+        if(is_numeric($GameiD) && $GameiD ) {
+            $data["GameID"]= $GameiD;
+        }
+    }
+
+    if(isset($_POST["GameMaster"]) && !empty($_POST["GameMaster"])){
+        $GM= trimdata($_POST["GameMaster"]);
+        if (preg_match("/^[a-zA-Z-' ]*$/", $GM)) {
+            $data["GameMaster"]= $GM;
+        }
+    }
+   
+    if (isset($_POST["players"]) && !empty($_POST["players"])) {
+        $players= trimdata($_POST["players"]);
+        if (preg_match("/^[a-zA-Z-,' .]*$/", $players)) {
+            $data["players"]= $players;
+        }
+    }
+
+    if(isset($_POST["time"]) && !empty($_POST["time"])){
+        $time = trimdata($_POST["time"]);
+        if (preg_match("/^(?:2[0-4]|[01][1-9]|10):([0-5][0-9])$/", $time)) {
+            $data["start_tijd"]= $time;
+        }
+    }
+
+    
+    
+
+    return $data;
+}
 
 
-?>
+function CheckTime($time){
+    if(is_numeric($time) && $time < 2400 && $time != ""){
+        
+    } elseif($time > 2400 && $time != ""){
+        console_log("ERROR: TIME CAN ONLY BE LESS THAN 24 HOURS");
+    }elseif($time == ""){
+        console_log("ERROR: TIME IS EMPTY");
+    }
+    else{
+        console_log("ERROR: THIS IS NOT A TIME");
+    }
+}   
+
+if ($_SERVER["REQUEST_METHOD"] == "GET") {
+    if(isset($_GET["submit"])){
+        $CheckInput= Controle();
+    }
+    
+} else {
+    console_log("ERROR: INPUT IS DECLINED OR EMPTY");
+}
