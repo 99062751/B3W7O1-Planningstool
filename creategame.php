@@ -2,7 +2,7 @@
 require_once 'connection_database.php';
 $gameinfo= GetGamesDataFromBase();
 $id= $_GET["id"];
-$gameinfo2= Connect_IDS_tobase();
+$gameinfo2= Connect_IDS_tobase($id);
 $planninginfo= GetAllDataFromBase();
 ?>
 
@@ -25,7 +25,6 @@ $planninginfo= GetAllDataFromBase();
         Spel
         <select name="gamename">
           <?php 
-          $IDpage= $planninginfo["game"];
            foreach($gameinfo as $arr => $game){ ?>
                 <option value="<?= $game["id"];?>" <?php if($game["id"] == $id){ echo "selected='selected'";} ?> ><?php echo $game["name"];?></option>
             <?php   }?>

@@ -18,7 +18,7 @@ $gameinfo= GetGamesDataFromBase();
     <?php  foreach($gameinfo as $arr => $game){?>
     <div class="gameblock">
         <?php $time= $explain_time = $players = $game = "";
-            if($_SERVER["REQUESTMETHOD"] == "GET"){
+            if($_SERVER["REQUESTMETHOD"] == "POST"){
                 $game= $_GET["game"];
                 $time= $_GET["start_time"];
                 $explain_time= $_GET["explain_time"];
