@@ -38,8 +38,6 @@ function GetGamesDataFromBase(){
 
 /*============ Geplande data van spel ophalen en in database zetten ===============*/
 
-
-
 function CalculateDuration($explaintime, $playtime){
     $explaintime = intval($explaintime);
     $playtime = intval($playtime);
@@ -55,7 +53,7 @@ function Connect_IDS_tobase($id, $table = "games"){
     $conn= connect();
    
     if (!empty($id) && is_numeric($id) && isset($id) && ($table == "planning" || $table == "games")) {
-        $stmt = $conn->prepare("SELECT * FROM `$table` WHERE id=:id AND STARTIME=:?");
+        $stmt = $conn->prepare("SELECT * FROM `$table` WHERE id=:id");
         $stmt->bindParam(':id', $id);
         $stmt->execute();
         $gameinfo2 = $stmt->fetch(PDO::FETCH_ASSOC);    
@@ -73,19 +71,14 @@ function trimdata($var){
     return $var;
 }
 
-// function GetAllInfoFromCreatePage($duration, $time){
-    
-//     AddCreatedGameToBase($duration, $time, $GM, $players, $GameiD);
-// }
-
-function AddCreatedGameToBase($duration, $time, $GM, $players, $GameiD){
+function AddCreatedGameToBase($data){
     $conn= connect();
-    if(isset($time) && isset($GM) && isset($players)){
+    if(isset($data["start_tijd"]) && isset($data["GameMaster"]) && isset($data["players"])){
         console_log("SUCCESFULLY ADDED: DATA");
         $stmt = $conn->prepare("INSERT INTO `planning`(game, start_time, duration, host, player) VALUES(:game, :start_time, :duration, :host, :players)");
         $stmt->bindParam(':game', $data["GameiD"]);
         $stmt->bindParam(':start_time', $data["start_tijd"]);
-        $stmt->bindParam(':duration', $duration);
+        $stmt->bindParam(':duration', $data["duration"]);
         $stmt->bindParam(':host', $data["GameMaster"]);
         $stmt->bindParam(':players', $data["players"]);
         $stmt->execute();   
@@ -94,17 +87,6 @@ function AddCreatedGameToBase($duration, $time, $GM, $players, $GameiD){
     }
     $conn = null;
 }    
-
-function GetAllDataFromBase(){
-    $conn= connect();
-    
-    $stmt = $conn->prepare("SELECT * FROM planning");
-    $stmt->execute();
-    $planninginfo = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    $conn = null;
-    return $planninginfo;
-}
 
 function Controle(){
     $data=[];
@@ -139,7 +121,6 @@ function Controle(){
         }
     }
 
-    //index.php
 
     if(isset($_POST["GameiD"]) && !empty($_POST["GameiD"])){
         $id= $_POST["GameiD"];
@@ -150,22 +131,8 @@ function Controle(){
     }
     
     return $data;
-    //AddCreatedGameToBase($data);
+    AddCreatedGameToBase($data);
 }
-
-
-// function CheckTime($time){
-//     if(is_numeric($time) && $time < 2400 && $time != ""){
-        
-//     } elseif($time > 2400 && $time != ""){
-//         console_log("ERROR: TIME CAN ONLY BE LESS THAN 24 HOURS");
-//     }elseif($time == ""){
-//         console_log("ERROR: TIME IS EMPTY");
-//     }
-//     else{
-//         console_log("ERROR: THIS IS NOT A TIME");
-//     }
-// }   
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if(isset($_POST["submit"])){

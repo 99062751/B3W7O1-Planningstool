@@ -1,6 +1,7 @@
 <?php
 require_once 'connection_database.php';
-$gameinfo2= Connect_IDS_tobase();
+$id= $_GET["id"];
+$gameinfo2= Connect_IDS_tobase($id, "games");
 
 
 ?>

@@ -2,8 +2,7 @@
 require_once 'connection_database.php';
 $gameinfo= GetGamesDataFromBase();
 $id= $_GET["id"];
-$gameinfo2= Connect_IDS_tobase($id);
-$planninginfo= GetAllDataFromBase();
+$gameinfo2= Connect_IDS_tobase($id, $table= "games");
 ?>
 
 
@@ -21,7 +20,7 @@ $planninginfo= GetAllDataFromBase();
     <h3> Hier maakt u uw spellen aan</h3>
     <p>Dit zijn uw keuzes:</p>
 
-    <form action="<?=htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="POST">
+    <form action="<?=htmlspecialchars($_SERVER["PHP_SELF"]).'?id='.$id;?>" method="POST">
         Spel
         <select name="gamename">
           <?php 
