@@ -76,7 +76,7 @@ function AddCreatedGameToBase($data){
     if(isset($data["start_tijd"]) && isset($data["GameMaster"]) && isset($data["players"])){
         console_log("SUCCESFULLY ADDED: DATA");
         $stmt = $conn->prepare("INSERT INTO `planning`(game, start_time, duration, host, player) VALUES(:game, :start_time, :duration, :host, :players)");
-        $stmt->bindParam(':game', $data["GameiD"]);
+        $stmt->bindParam(':game', $data["GameID"]);
         $stmt->bindParam(':start_time', $data["start_tijd"]);
         $stmt->bindParam(':duration', $data["duration"]);
         $stmt->bindParam(':host', $data["GameMaster"]);
@@ -129,9 +129,10 @@ function Controle(){
         $duration= CalculateDuration($game["explain_minutes"], $game["play_minutes"]);
         $data["duration"]= $duration;
     }
-    
-    return $data;
+    // console_log("Chingco");
+    // return $data;
     AddCreatedGameToBase($data);
+
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
