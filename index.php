@@ -1,7 +1,6 @@
 <?php
 require_once 'connection_database.php';
 $gameinfo= GetGamesDataFromBase();
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -17,19 +16,19 @@ $gameinfo= GetGamesDataFromBase();
         <h3>Uw spellen:</h3>
         <div class="gameblock"> 
             <?php 
-                    $time= $explain = $players = $game = "";
-                
-                    if($_SERVER["REQUESTMETHOD"] == "POST"){
-                        $game= $_POST["GameiD"];
-                        $time= $_POST["time"];
-                        $explain= $_POST["explain_time"];
-                        $players= $_POST["players"];
+                $time= $explain =$players = $game = "";
+            
+                if($_SERVER["REQUESTMETHOD"] == "POST"){
+                    $game= $_POST["GameiD"];
+                    $time= $_POST["time"];
+                    $explain= $_POST["duration"];
+                    $players= $_POST["players"];
 
-                        echo "<b>Game: </b>". $game;
-                        echo "<b>Starttijd: </b>". $start_time;
-                        echo "<b>Host: </b>". $explain;
-                        echo "<b>Spelers: </b>". $players;
-                    }
+                    echo "<b>Game: </b>". $game;
+                    echo "<b>Starttijd: </b>". $start_time;
+                    echo "<b>Host: </b>". $explain;
+                    echo "<b>Spelers: </b>". $players;
+                }
             /*foreach($gameinfo as $arr => $game){?>
                 
                     <?php $time= $explain_time = $players = $game = "";
