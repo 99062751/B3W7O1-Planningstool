@@ -14,6 +14,7 @@ $planninginfo = GetPlanningDataFromBase();
 <body>
         <div class="container">
             <h1>Welkom in deze webiste!</h1>
+            <a class="" href="viewingpage.php" style= "text-decoration: none">Spel plannen</a>
             <h3>Uw spellen:</h3>
 
                 <?php foreach ($planninginfo as $game => $value) { ?>  
@@ -22,8 +23,8 @@ $planninginfo = GetPlanningDataFromBase();
                             $gameinfo2= Connect_IDS_tobase($id, "games");
                         ?>
 
-                    <div class="detail item">
-                        <div class="left">
+                    <div class="detail itemX">
+                        <div class="left stats" style="text-align: center">
                             <img class="avatar" src="afbeeldingen/<?php echo $gameinfo2["image"];?>">
                             <h3><?=$gameinfo2["name"];?></h3> 
                             <p><?=$value["game"];?></p>
@@ -33,9 +34,6 @@ $planninginfo = GetPlanningDataFromBase();
                         </div> 
                     </div> 
                 <?php } ?>
-                
-                
-            <a class="" href="viewingpage.php" style= "text-decoration: none">Spel plannen</a>
         </div>
 </body>
 </html>

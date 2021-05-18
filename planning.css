@@ -137,6 +137,41 @@ footer {
     right: 10px;    
 }
 
+
 .item{
     position: relative;
+}
+
+.itemX{
+    border-bottom: 1px solid silver;
+    padding: 5px;
+    margin: 10px;
+    display: inline-flex;
+}
+.itemX:hover{
+    background-color: gainsboro;
+}
+
+.itemX .left{
+    display: inline-block;
+    margin-right: 20px;
+}
+
+.itemX .left .avatar {
+    border: 1px solid black;
+    border-radius: 50%;
+    height: 150px;
+}
+
+.itemX .right{
+    display: inline-block;
+}
+
+.itemX .right h2 {
+    padding: 0;
+    margin: 0;
+}
+
+.itemX:hover .right ul{
+    color: black;
 }
