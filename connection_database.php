@@ -35,7 +35,16 @@ function GetGamesDataFromBase(){
     $conn = null;
     return $gameinfo;
 }
+function GetPlanningDataFromBase(){
+    $conn= connect();
 
+    $stmt = $conn->prepare("SELECT * FROM planning");
+    $stmt->execute();
+    $planninginfo = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $conn = null;
+    return $planninginfo;
+}
 /*============ Geplande data van spel ophalen en in database zetten ===============*/
 
 function CalculateDuration($explaintime, $playtime){
@@ -76,7 +85,7 @@ function AddCreatedGameToBase($data){
     if(isset($data["start_tijd"]) && isset($data["GameMaster"]) && isset($data["players"])){
         console_log("SUCCESFULLY ADDED: DATA");
         $stmt = $conn->prepare("INSERT INTO `planning`(game, start_time, duration, host, player) VALUES(:game, :start_time, :duration, :host, :players)");
-        $stmt->bindParam(':game', $data["GameID"]);
+        $stmt->bindParam(':game', $data["GameiD"]);
         $stmt->bindParam(':start_time', $data["start_tijd"]);
         $stmt->bindParam(':duration', $data["duration"]);
         $stmt->bindParam(':host', $data["GameMaster"]);
@@ -96,7 +105,7 @@ function Controle(){
         settype($GameiD, "int");
         $game= Connect_IDS_tobase($GameiD, "games");
         if(is_numeric($GameiD) && isset($GameiD) && !empty($GameiD) && isset($game) && !empty($game)) {
-            $data["GameID"]= $GameiD;
+            $data["GameiD"]= $GameiD;
         }
     }
 
@@ -121,7 +130,6 @@ function Controle(){
         }
     }
 
-
     if(isset($_POST["GameiD"]) && !empty($_POST["GameiD"])){
         $id= $_POST["GameiD"];
         $game = Connect_IDS_tobase($id, "games");
@@ -134,6 +142,7 @@ function Controle(){
     AddCreatedGameToBase($data);
 
 }
+
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if(isset($_POST["submit"])){
