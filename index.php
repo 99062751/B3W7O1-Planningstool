@@ -32,8 +32,8 @@ $planninginfo = GetPlanningDataFromBase();
                             <p>Begintijd: <?=$value["start_time"];?></p>
                             <p>Uitlegger: <?=$value["host"];?></p>
                             <p>Duur: <?=$value["duration"];?> minuten</p>
-                            <p><a href="">Bewerk</a></p>
-                            <p><a href="">Verwijder</a></p>
+                            <p><a href="updategame.php">Bewerk</a></p>
+                            <p><a href="alertpage.php">Verwijder</a></p>
                         </div> 
                     </div> 
                 </a>

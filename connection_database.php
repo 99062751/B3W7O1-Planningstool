@@ -155,6 +155,18 @@ function Controle(){
 
 }
 
+function Delete($Id){
+    $conn= connect();
+    
+    if(!empty($Id) && is_numeric($Id)){
+        $stmt = $conn->prepare("DELETE FROM planning WHERE id=:id");
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+        $planninginfo = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    $conn = null;
+    return $planninginfo;  
+}
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if(isset($_POST["submit"])){
