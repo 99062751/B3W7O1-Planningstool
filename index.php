@@ -20,10 +20,11 @@ $planninginfo = GetPlanningDataFromBase();
                 <?php foreach ($planninginfo as $game => $value) { ?>  
                         <?php 
                             $id= $value["game"];
+                            $Id= $value["id"];
                             $gameinfo2= Connect_IDS_tobase($id, "games");
                         ?>
 
-                <a href="gamedetails.php?<?= $value["game"];?>">
+                <a href="gamedetails.php?game=<?= $value["game"] .'&?Id=' .$value["id"];?>">
                     <div class="detail itemX">
                         <div class="left stats" style="text-align: center">
                             <img class="avatar" src="afbeeldingen/<?php echo $gameinfo2["image"];?>">

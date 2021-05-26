@@ -45,6 +45,18 @@ function GetPlanningDataFromBase(){
     $conn = null;
     return $planninginfo;
 }
+
+function GetSpecificInfoFromDataBase($Id){
+    $conn= connect();
+
+    $stmt = $conn->prepare("SELECT * FROM planning WHERE id=:id");
+    $stmt->bindParam(':id', $Id);
+    $stmt->execute();
+    $infoS = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $conn = null;
+    return $infoS;
+}
 /*============ Geplande data van spel ophalen en in database zetten ===============*/
 
 function CalculateDuration($explaintime, $playtime){
