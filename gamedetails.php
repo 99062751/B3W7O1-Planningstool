@@ -4,7 +4,6 @@ $planninginfo = GetPlanningDataFromBase();
 $id2= $_GET["game"];
 $gameinfo2= Connect_IDS_tobase($id, "planning");
 
-
 console_log($id2);
 ?>
 
@@ -19,6 +18,12 @@ console_log($id2);
 <body>
 <header><h1><?php echo $gameinfo2["name"];?></h1>
     <a class="backbutton" href="index.php"><i class="fas fa-long-arrow-alt-left"></i> Terug</a></header>
+    <?php foreach ($planninginfo as $game => $value) { ?>  
+    <?php
+        $id= $value["game"];
+        $gameinfo2= Connect_IDS_tobase($id2, "games");
+    } 
+    ?>
 <div id="container">
     <div class="detail">
         <div class="left">
@@ -42,9 +47,9 @@ console_log($id2);
         <h4>Uitlegtijd</h4>
         <?php   echo $gameinfo2["explain_minutes"];?>
         <h4>Spelers:</h4>
-        <?php   echo $planninginfo["player"];?>
+        <?php   echo $value["player"];?>
         <h4>Uitlegger:</h4>
-        <?php   echo $planninginfo["host"];?>
+        <?php   echo $value["host"];?>
         </div>        
     </div> 
     

@@ -23,7 +23,7 @@ $planninginfo = GetPlanningDataFromBase();
                             $gameinfo2= Connect_IDS_tobase($id, "games");
                         ?>
 
-                <a href="gamedetails.php?<?= $id;?>">
+                <a href="gamedetails.php?<?= $value["game"];?>">
                     <div class="detail itemX">
                         <div class="left stats" style="text-align: center">
                             <img class="avatar" src="afbeeldingen/<?php echo $gameinfo2["image"];?>">
