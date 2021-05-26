@@ -38,7 +38,7 @@ function GetGamesDataFromBase(){
 function GetPlanningDataFromBase(){
     $conn= connect();
 
-    $stmt = $conn->prepare("SELECT * FROM planning");
+    $stmt = $conn->prepare("SELECT * FROM planning ORDER BY start_time");
     $stmt->execute();
     $planninginfo = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

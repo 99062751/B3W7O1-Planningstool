@@ -23,16 +23,21 @@ $planninginfo = GetPlanningDataFromBase();
                             $gameinfo2= Connect_IDS_tobase($id, "games");
                         ?>
 
+                <a href="gamedetails.php?<?= $id;?>">
                     <div class="detail itemX">
                         <div class="left stats" style="text-align: center">
                             <img class="avatar" src="afbeeldingen/<?php echo $gameinfo2["image"];?>">
                             <h3><?=$gameinfo2["name"];?></h3> 
-                            <p><?=$value["game"];?></p>
-                            <p><?=$value["start_time"];?></p>
-                            <p><?=$value["host"];?></p>
-                            <p><?=$value["player"];?></p>
+                            <p>Begintijd: <?=$value["start_time"];?></p>
+                            <p>Uitlegger: <?=$value["host"];?></p>
+                            <p>Duur: <?=$value["duration"];?> minuten</p>
+                            <p><a href="">Bewerk</a></p>
+                            <p><a href="">Verwijder</a></p>
                         </div> 
                     </div> 
+                </a>
+                        
+                    
                 <?php } ?>
         </div>
 </body>
