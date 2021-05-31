@@ -45,17 +45,6 @@ function GetPlanningDataFromBase(){
     $conn = null;
     return $planninginfo;
 }
-/*============ Rekenfunctie ===============*/
-
-function CalculateDuration($explaintime, $playtime){
-    $explaintime = intval($explaintime);
-    $playtime = intval($playtime);
-
-    if (isset($playtime) && isset($playtime) && is_numeric($playtime) && is_numeric($playtime)) {
-        $duration= $playtime+ $explaintime;
-        return $duration;
-    }
-}
 
 //Resultaat ophalen uit database met zelfde id als $id
 function Connect_IDS_tobase($id, $table = "games"){
@@ -85,14 +74,7 @@ function GetSpecificInfoFromDataBase($Id){
     return $infoS;
 }
 
-//te doen: spel controleren, spelers controleren
-function trimdata($var){
-    $var= trim($var);
-    $var= stripslashes($var);
-    $var= htmlspecialchars($var);
-    return $var;
-}
-
+/*============ CRUD ===============*/
 function AddCreatedGameToBase($data){
     $conn= connect();
     if(isset($data["start_tijd"]) && isset($data["GameMaster"]) && isset($data["players"])){
@@ -139,6 +121,14 @@ function Delete($Id){
     }
     $conn = null;
     return $planninginfo;  
+}
+/*============ Controles ===============*/
+
+function trimdata($var){
+    $var= trim($var);
+    $var= stripslashes($var);
+    $var= htmlspecialchars($var);
+    return $var;
 }
 
 function Controle(){
@@ -199,6 +189,19 @@ function Controle(){
 
 }
 
+/*============ Rekenfunctie ===============*/
+
+function CalculateDuration($explaintime, $playtime){
+    $explaintime = intval($explaintime);
+    $playtime = intval($playtime);
+
+    if (isset($playtime) && isset($playtime) && is_numeric($playtime) && is_numeric($playtime)) {
+        $duration= $playtime+ $explaintime;
+        return $duration;
+    }
+}
+
+/*============ Checken op submit ===============*/
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if(isset($_POST["submit"])){
         $CheckInput= Controle();
