@@ -17,12 +17,12 @@ $gameinfo2= Connect_IDS_tobase($id, $table= "games");
 <body>
 <div class="container">
     <h1>Welkom!</h1>
-    <h3> Hier maakt u uw spellen aan</h3>
+    <h3>Hier maakt u uw spellen aan</h3>
     <p>Dit zijn uw keuzes:</p>
 
     <form action="<?=htmlspecialchars($_SERVER["PHP_SELF"]).'?id='.$id;?>" method="POST">
-        Spel
-        <select name="gamename">
+        <label for="gamename">Spel</label>
+        <select name="GameiD">
           <?php 
            foreach($gameinfo as $arr => $game){ ?>
                 <option value="<?= $game["id"];?>" <?php if($game["id"] == $id){ echo "selected='selected'";} ?> ><?php echo $game["name"];?></option>
@@ -31,8 +31,6 @@ $gameinfo2= Connect_IDS_tobase($id, $table= "games");
             <br>
         <label for="time">Starttijd</label>
         <input type="time" name="time">
-
-        <input type="hidden" name="GameiD" value="<?= $gameinfo2["id"]?>">
         <br>
         <label for="GameMaster">Persoon die uitlegt</label>
         <input name="GameMaster" type="text">
@@ -47,3 +45,4 @@ $gameinfo2= Connect_IDS_tobase($id, $table= "games");
 </div>
 </body>
 </html>
+

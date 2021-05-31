@@ -24,7 +24,7 @@ function connect(){
         echo "Connection failed: " . $e->getMessage();
     }
 }
-
+/*============ Geplande data van spel ophalen en in database zetten ===============*/
 function GetGamesDataFromBase(){
     $conn= connect();
 
@@ -45,19 +45,7 @@ function GetPlanningDataFromBase(){
     $conn = null;
     return $planninginfo;
 }
-
-function GetSpecificInfoFromDataBase($Id){
-    $conn= connect();
-
-    $stmt = $conn->prepare("SELECT * FROM planning WHERE id=:id");
-    $stmt->bindParam(':id', $Id);
-    $stmt->execute();
-    $infoS = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    $conn = null;
-    return $infoS;
-}
-/*============ Geplande data van spel ophalen en in database zetten ===============*/
+/*============ Rekenfunctie ===============*/
 
 function CalculateDuration($explaintime, $playtime){
     $explaintime = intval($explaintime);
@@ -82,6 +70,19 @@ function Connect_IDS_tobase($id, $table = "games"){
     }
 
     $conn = null;
+}
+
+
+function GetSpecificInfoFromDataBase($Id){
+    $conn= connect();
+
+    $stmt = $conn->prepare("SELECT * FROM planning WHERE id=:id");
+    $stmt->bindParam(':id', $Id);
+    $stmt->execute();
+    $infoS = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $conn = null;
+    return $infoS;
 }
 
 //te doen: spel controleren, spelers controleren
@@ -109,8 +110,51 @@ function AddCreatedGameToBase($data){
     $conn = null;
 }    
 
+function UpdateGame($data){
+    $conn= connect();
+    if(isset($data["start_tijd"]) && isset($data["GameMaster"]) && isset($data["players"])){
+        console_log("SUCCESFULLY ADDED: DATA");
+        $stmt = $conn->prepare("UPDATE `planning` SET game= :game, start_time= :starttime, duration= :duration, host= :host, player= :players WHERE id=:id");
+        $stmt->bindParam(':game', $data["GameiD"]);
+        $stmt->bindParam(':start_time', $data["start_tijd"]);
+        $stmt->bindParam(':duration', $data["duration"]);
+        $stmt->bindParam(':host', $data["GameMaster"]);
+        $stmt->bindParam(':players', $data["players"]);
+        $stmt->bindParam(':id', $data["ItemID"]);
+        $stmt->execute();   
+    } else{
+        console_log("ERROR: NAME FOR LOCATION IS EMPTY");
+    }
+    $conn = null;
+} 
+
+function Delete($Id){
+    $conn= connect();
+    
+    if(!empty($Id) && is_numeric($Id)){
+        $stmt = $conn->prepare("DELETE FROM planning WHERE id=:id");
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+        $planninginfo = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    $conn = null;
+    return $planninginfo;  
+}
+
 function Controle(){
     $data=[];
+ 
+    if(!empty($_POST["update"])){
+        if(isset($_POST["ItemID"]) && !empty($_POST["ItemID"])){
+            $ItemID= trimdata($_POST["ItemID"]);
+            settype($ItemID, "int");
+            $info= Connect_IDS_tobase($ItemID, "planning");
+            if(is_numeric($ItemID) && isset($ItemID) && !empty($ItemID) && isset($info) && !empty($info)) {
+                $data["ItemID"]= $ItemID;
+            }
+        }
+    }
+    
 
     if(isset($_POST["GameiD"]) && !empty($_POST["GameiD"])){
         $GameiD= trimdata($_POST["GameiD"]);
@@ -155,21 +199,10 @@ function Controle(){
 
 }
 
-function Delete($Id){
-    $conn= connect();
-    
-    if(!empty($Id) && is_numeric($Id)){
-        $stmt = $conn->prepare("DELETE FROM planning WHERE id=:id");
-        $stmt->bindParam(':id', $id);
-        $stmt->execute();
-        $planninginfo = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-    $conn = null;
-    return $planninginfo;  
-}
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if(isset($_POST["submit"])){
+        $CheckInput= Controle();
+    } elseif(isset($_POST["update"])){
         $CheckInput= Controle();
     }
     
