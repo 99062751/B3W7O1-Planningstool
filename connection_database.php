@@ -8,7 +8,7 @@ function console_log($output, $with_script_tags = true) {
     echo $js_code;
 }
 
-/*============ Alles met connectie database ===============*/
+/*============ Connectie met database ===============*/
 function connect(){
     $servername = "localhost";
     $username = "root";
@@ -115,12 +115,15 @@ function Delete($Id){
     
     if(!empty($Id) && is_numeric($Id)){
         $stmt = $conn->prepare("DELETE FROM planning WHERE id=:id");
-        $stmt->bindParam(':id', $id);
+        $stmt->bindParam(':id', $Id);
         $stmt->execute();
-        $planninginfo = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        console_log("SUCCESFULLY DELETED!");
+        echo "Succesvol verwijderd.";
+        echo '<a href="index.php">Terug naar homepagina</a>';
+        echo '<br>';
+        echo '<br>';
     }
     $conn = null;
-    return $planninginfo;  
 }
 /*============ Controles ===============*/
 
@@ -207,6 +210,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $CheckInput= Controle();
     } elseif(isset($_POST["update"])){
         $CheckInput= Controle();
+    }
+    elseif (isset($_POST["delete"])) {
+        console_log($_POST["Id"]);
+        $Id= $_POST["Id"];
+        Delete($Id);
     }
     
 } else {

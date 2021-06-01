@@ -1,8 +1,11 @@
 <?php
 require_once 'connection_database.php';
 $gameinfo= GetGamesDataFromBase();
-$id= $_GET["id"];
-$gameinfo2= Connect_IDS_tobase($id, $table= "games");
+$game= $_GET['game'];
+$Id= $_GET['?Id'];
+$gameinfo2= Connect_IDS_tobase($Id, $table= "planning");
+console_log($Id); 
+
 ?>
 
 
@@ -26,25 +29,25 @@ $gameinfo2= Connect_IDS_tobase($id, $table= "games");
         
         <select name="GameiD">
           <?php 
-           foreach($gameinfo as $arr => $game){ ?>
-                <option value="<?= $game["id"];?>" <?php if($game["id"] == $id){ echo "selected='selected'";} ?> ><?php echo $game["name"];?></option>
+           foreach($gameinfo as $arr => $info){ ?>
+                <option value="<?= $info["id"];?>" <?php if($info["id"] == $game){ echo "selected='selected'";} ?> ><?= $info["name"];?></option>
             <?php } ?>
         </select>
             <br>
         <label for="time">Starttijd</label>
-        <input type="time" name="time">
+        <input type="time" name="time" value="<?= $gameinfo2["start_time"]?>">
         <br>
         <label for="GameMaster">Persoon die uitlegt</label>
-        <input name="GameMaster" type="text" value="<?= $gameinfo2["id"]?>">
+        <input name="GameMaster" type="text" value="<?= $gameinfo2["host"]?>">
         <br>
         <label for="players">Personen die spelen</label><br>
         <textarea name="players" cols="30" rows="10">
-        <?= $gameinfo2["id"]?>
+        <?= $gameinfo2["player"]?>
         </textarea>
         <br>
         <button type="submit" name="update" value="submit">Maak</button>
         <br>
-        <a href="gamepage.php?id=<?= $id?>" style="text-decoration: none">Terug naar gamepagina</a>
+        <a href="index.php">Terug naar homepagina</a>
     </form>
 </div>
 </body>
