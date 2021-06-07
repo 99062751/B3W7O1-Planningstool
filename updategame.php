@@ -4,8 +4,7 @@ $gameinfo= GetGamesDataFromBase();
 $game= $_GET['game'];
 $Id= $_GET['?Id'];
 $gameinfo2= Connect_IDS_tobase($Id, $table= "planning");
-console_log($Id); 
-
+console_log($Id);
 ?>
 
 
@@ -23,9 +22,9 @@ console_log($Id);
     <h3>Hier maakt u uw spellen aan</h3>
     <p>Dit zijn uw keuzes:</p>
 
-    <form action="<?=htmlspecialchars($_SERVER["PHP_SELF"]).'?id='.$id;?>" method="POST">
+    <form action="<?=htmlspecialchars($_SERVER["PHP_SELF"]).'?Id='.$Id;?>" method="POST">
         <label for="gamename">Spel</label>
-        <input type="hidden" name="ItemID" value="<?= $gameinfo2["id"]?>">
+        <input type="hidden" name="ItemID" value="<?= $Id?>">
         
         <select name="GameiD">
           <?php 
@@ -35,7 +34,7 @@ console_log($Id);
         </select>
             <br>
         <label for="time">Starttijd</label>
-        <input type="time" name="time" value="<?= $gameinfo2["start_time"]?>">
+        <input type="time" name="time" value="<?= date('H:i' , strtotime($gameinfo2["start_time"]));?>">
         <br>
         <label for="GameMaster">Persoon die uitlegt</label>
         <input name="GameMaster" type="text" value="<?= $gameinfo2["host"]?>">

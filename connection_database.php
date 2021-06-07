@@ -74,57 +74,6 @@ function GetSpecificInfoFromDataBase($Id){
     return $infoS;
 }
 
-/*============ CRUD ===============*/
-function AddCreatedGameToBase($data){
-    $conn= connect();
-    if(isset($data["start_tijd"]) && isset($data["GameMaster"]) && isset($data["players"])){
-        console_log("SUCCESFULLY ADDED: DATA");
-        $stmt = $conn->prepare("INSERT INTO `planning`(game, start_time, duration, host, player) VALUES(:game, :start_time, :duration, :host, :players)");
-        $stmt->bindParam(':game', $data["GameiD"]);
-        $stmt->bindParam(':start_time', $data["start_tijd"]);
-        $stmt->bindParam(':duration', $data["duration"]);
-        $stmt->bindParam(':host', $data["GameMaster"]);
-        $stmt->bindParam(':players', $data["players"]);
-        $stmt->execute();   
-    } else{
-        console_log("ERROR: NAME FOR LOCATION IS EMPTY");
-    }
-    $conn = null;
-}    
-
-function UpdateGame($data){
-    $conn= connect();
-    if(isset($data["start_tijd"]) && isset($data["GameMaster"]) && isset($data["players"])){
-        console_log("SUCCESFULLY ADDED: DATA");
-        $stmt = $conn->prepare("UPDATE `planning` SET game= :game, start_time= :starttime, duration= :duration, host= :host, player= :players WHERE id=:id");
-        $stmt->bindParam(':game', $data["GameiD"]);
-        $stmt->bindParam(':start_time', $data["start_tijd"]);
-        $stmt->bindParam(':duration', $data["duration"]);
-        $stmt->bindParam(':host', $data["GameMaster"]);
-        $stmt->bindParam(':players', $data["players"]);
-        $stmt->bindParam(':id', $data["ItemID"]);
-        $stmt->execute();   
-    } else{
-        console_log("ERROR: NAME FOR LOCATION IS EMPTY");
-    }
-    $conn = null;
-} 
-
-function Delete($Id){
-    $conn= connect();
-    
-    if(!empty($Id) && is_numeric($Id)){
-        $stmt = $conn->prepare("DELETE FROM planning WHERE id=:id");
-        $stmt->bindParam(':id', $Id);
-        $stmt->execute();
-        console_log("SUCCESFULLY DELETED!");
-        echo "Succesvol verwijderd.";
-        echo '<a href="index.php">Terug naar homepagina</a>';
-        echo '<br>';
-        echo '<br>';
-    }
-    $conn = null;
-}
 /*============ Controles ===============*/
 
 function trimdata($var){
@@ -136,6 +85,7 @@ function trimdata($var){
 
 function Controle(){
     $data=[];
+    $errors=[];
  
     if(!empty($_POST["update"])){
         if(isset($_POST["ItemID"]) && !empty($_POST["ItemID"])){
@@ -144,10 +94,15 @@ function Controle(){
             $info= Connect_IDS_tobase($ItemID, "planning");
             if(is_numeric($ItemID) && isset($ItemID) && !empty($ItemID) && isset($info) && !empty($info)) {
                 $data["ItemID"]= $ItemID;
+            } else{
+                $errors["ItemID"] = "het geplande spel dat je wilt aanpassen bestaat niet.";
             }
+        } else{
+            $errors["ItemID"] = "het geplande spel dat je wilt aanpassen bestaat niet of word niet meegestuurd";
         }
-    }
+    } 
     
+//maak errors self explaining
 
     if(isset($_POST["GameiD"]) && !empty($_POST["GameiD"])){
         $GameiD= trimdata($_POST["GameiD"]);
@@ -186,10 +141,64 @@ function Controle(){
         $duration= CalculateDuration($game["explain_minutes"], $game["play_minutes"]);
         $data["duration"]= $duration;
     }
-    // console_log("Chingco");
-    // return $data;
-    AddCreatedGameToBase($data);
+    $data["errors"]= $errors;    
+    return $data;
+}
 
+/*============ CRUD ===============*/
+function AddCreatedGameToBase($data){
+    $conn= connect();
+    if(isset($data["start_tijd"]) && isset($data["GameMaster"]) && isset($data["players"])){
+        console_log("SUCCESFULLY ADDED: DATA");
+        $stmt = $conn->prepare("INSERT INTO `planning`(game, start_time, duration, host, player) VALUES(:game, :start_time, :duration, :host, :players)");
+        $stmt->bindParam(':game', $data["GameiD"]);
+        $stmt->bindParam(':start_time', $data["start_tijd"]);
+        $stmt->bindParam(':duration', $data["duration"]);
+        $stmt->bindParam(':host', $data["GameMaster"]);
+        $stmt->bindParam(':players', $data["players"]);
+        $stmt->execute();  
+        echo 'game is toegevoegd.'; 
+    } else{
+        console_log("ERROR: NAME FOR LOCATION IS EMPTY");
+    }
+    $conn = null;
+}    
+
+function UpdateGame($data){
+    console_log($data["ItemID"]);
+    $conn= connect();
+    if(isset($data["start_tijd"]) && isset($data["GameMaster"]) && isset($data["players"]) && isset($data["GameiD"]) && isset($data["ItemID"])){
+        $stmt = $conn->prepare("UPDATE `planning` SET game= :game, start_time= :start_time, duration= :duration, host= :host, player= :players WHERE id=:id");
+        $stmt->bindParam(':game', $data["GameiD"]);
+        $stmt->bindParam(':start_time', $data["start_tijd"]);
+        $stmt->bindParam(':duration', $data["duration"]);
+        $stmt->bindParam(':host', $data["GameMaster"]);
+        $stmt->bindParam(':players', $data["players"]);
+        $stmt->bindParam(':id', $data["ItemID"]);
+        $stmt->execute();   
+        console_log("SUCCESFULLY UPDATED DATA");
+        echo 'game is ge-updated.';
+
+    } else{
+        console_log("ERROR: NAME FOR LOCATION IS EMPTY");
+    }
+    $conn = null;
+} 
+
+function Delete($Id){
+    $conn= connect();
+    
+    if(!empty($Id) && is_numeric($Id)){
+        $stmt = $conn->prepare("DELETE FROM planning WHERE id=:id");
+        $stmt->bindParam(':id', $Id);
+        $stmt->execute();
+        console_log("SUCCESFULLY DELETED!");
+        echo "Game is verwijderd.";
+        echo '<a href="index.php">Terug naar homepagina</a>';
+        echo '<br>';
+        echo '<br>';
+    }
+    $conn = null;
 }
 
 /*============ Rekenfunctie ===============*/
@@ -207,11 +216,16 @@ function CalculateDuration($explaintime, $playtime){
 /*============ Checken op submit ===============*/
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if(isset($_POST["submit"])){
-        $CheckInput= Controle();
+        $data= Controle();
+        if (isset($data) && empty($data["errors"])) {
+            AddCreatedGameToBase($data);
+        }
     } elseif(isset($_POST["update"])){
-        $CheckInput= Controle();
-    }
-    elseif (isset($_POST["delete"])) {
+        $data= Controle();
+        if (isset($data) && empty($data["errors"])) {
+            UpdateGame($data);
+        }
+    } elseif (isset($_POST["delete"])) {
         console_log($_POST["Id"]);
         $Id= $_POST["Id"];
         Delete($Id);
