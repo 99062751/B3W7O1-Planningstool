@@ -35,7 +35,8 @@ $infoS= GetSpecificInfoFromDataBase($Id);
 
         <div class="right">
             <h4>Beschrijving</h4>
-            <?php echo $gameinfo2["description"];?>
+            
+            <?= $gameinfo2["description"];?>
             <h4>Expansions</h4>
             <?php  echo $gameinfo2["expansions"];?>
             <h4>Skills</h4>
